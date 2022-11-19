@@ -64,7 +64,7 @@ const SideNav = () => {
   };
 
   const menuContent = (
-    <div style={{ padding: 20 }}>
+    <div style={{ padding: 25 }}>
       <input
         type="radio"
         id="vehicle1"
