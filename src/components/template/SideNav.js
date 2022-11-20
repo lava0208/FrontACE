@@ -14,8 +14,11 @@ import {
 import Logo from "components/template/Logo";
 import useResponsive from "utils/hooks/useResponsive";
 import { useDispatch, useSelector } from "react-redux";
-import { setSalaryData } from "views/sales/SalesDashboard/store/dataSlice";
-import { apiGetSalaries } from "services/SalariesServices";
+import {
+  setGraphData,
+  setSalaryData,
+} from "views/sales/SalesDashboard/store/dataSlice";
+import { apiGetGraph, apiGetSalaries } from "services/SalariesServices";
 
 const sideNavStyle = {
   width: SIDE_NAV_WIDTH,
@@ -64,7 +67,7 @@ const SideNav = () => {
   };
 
   const menuContent = (
-    <div style={{ padding: 25 }}>
+    <div style={{ padding: 27 }}>
       <input
         type="radio"
         id="vehicle1"
@@ -119,7 +122,9 @@ const SideNav = () => {
         variant="solid"
         onClick={async () => {
           const responde = await apiGetSalaries(filter);
+          const response = await apiGetGraph(filter);
           dispatch(setSalaryData(responde?.data?.data));
+          dispatch(setGraphData(response?.data?.data));
         }}
       >
         Apply Filter

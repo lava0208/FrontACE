@@ -19,10 +19,14 @@ const dataSlice = createSlice({
     loading: true,
     dashboardData: {},
     salarydata: [],
+    graphData: [],
   },
   reducers: {
     setSalaryData: (state, action) => {
       state.salarydata = action.payload;
+    },
+    setGraphData: (state, action) => {
+      state.graphData = action.payload;
     },
   },
   extraReducers: {
@@ -35,5 +39,5 @@ const dataSlice = createSlice({
     },
   },
 });
-export const { setSalaryData } = dataSlice.actions;
+export const { setSalaryData, setGraphData } = dataSlice.actions;
 export default dataSlice.reducer;

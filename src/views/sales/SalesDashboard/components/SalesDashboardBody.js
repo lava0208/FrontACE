@@ -1,10 +1,11 @@
+/* eslint-disable array-callback-return */
 import React, { useEffect } from "react";
 import { Loading } from "components/shared";
 import SalesReport from "./SalesReport";
 import LatestOrder from "./LatestOrder";
-import { setSalaryData } from "../store/dataSlice";
+import { setSalaryData, setGraphData } from "../store/dataSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { apiGetSalaries } from "services/SalariesServices";
+import { apiGetSalaries, apiGetGraph } from "services/SalariesServices";
 
 const SalesDashboardBody = () => {
   const dispatch = useDispatch();
@@ -19,8 +20,24 @@ const SalesDashboardBody = () => {
 
   const fetchData = async () => {
     const reponse = await apiGetSalaries({ order: "ASC" });
+    const response = await apiGetGraph({});
     dispatch(setSalaryData(reponse?.data?.data));
+    dispatch(setGraphData(response?.data?.data));
   };
+  const SeriesA = data?.graphData
+    .filter((graph) => {
+      if (graph.gender === "Male") {
+        return graph.values;
+      }
+    })
+    .map((val) => val.values);
+  const SeriesB = data?.graphData
+    .filter((graph) => {
+      if (graph.gender === "Female") {
+        return graph.values;
+      }
+    })
+    .map((val) => val.values);
   return (
     <Loading loading={false}>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -29,26 +46,25 @@ const SalesDashboardBody = () => {
             series: [
               {
                 name: "Series A",
-                data: [1.4, 2, 2.5, 1.5, 2.5, 2.8, 3.8, 4.6],
+                data: SeriesA,
               },
               {
                 name: "Series B",
-                data: [20, 29, 37, 36, 44, 45, 50, 58],
+                data: SeriesB,
               },
             ],
-            categories: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016],
           }}
         />
         <SalesReport
           data={{
             series: [
               {
-                name: "Series A",
-                data: [1.4, 2, 2.5, 1.5, 2.5, 2.8, 3.8, 4.6],
+                name: "Series c",
+                data: SeriesA,
               },
               {
-                name: "Series B",
-                data: [20, 29, 37, 36, 44, 45, 50, 58],
+                name: "Series D",
+                data: SeriesB,
               },
             ],
             categories: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016],
@@ -57,7 +73,7 @@ const SalesDashboardBody = () => {
         />
         <SalesReport
           data={{
-            series: [44, 55, 41, 17, 15],
+            series: [...SeriesA, ...SeriesB],
             categories: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016],
           }}
           type="donut"
